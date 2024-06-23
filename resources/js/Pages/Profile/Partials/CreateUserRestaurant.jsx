@@ -1,27 +1,47 @@
 import { useRef, useState } from 'react';
-import DangerButton from '@/Components/DangerButton';
+import PrimaryButton from '@/Components/PrimaryButton';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 
-export default function CreateUserRestaurant() {
+export default function CreateUserRestaurant({ className = '' }) {
+    const [showingRestaurantModal, setShowingRestaurantModal] = useState(false);
+    const passwordInput = useRef();
 
-    const deleteUser = (e) => {
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        reset,
+        errors,
+    } = useForm({
+        restaurantName: '',
+        location: '',
+        cuisine: '',
+    });
+
+    const showRestaurantModal = () => {
+        setShowingRestaurantModal(true);
+    };
+
+    const registerRestaurant = (e) => {
         e.preventDefault();
 
-        destroy(route('profile.destroy'), {
+        post(route('restaurant.create'), {
             preserveScroll: true,
             onSuccess: () => closeModal(),
-            onError: () => passwordInput.current.focus(),
-            onFinish: () => reset(),
+            onFinish: () => {
+                router.visit(route('restaurant.index'));
+            },
         });
     };
 
     const closeModal = () => {
-        setConfirmingUserDeletion(false);
+        setShowingRestaurantModal(false);
 
         reset();
     };
@@ -29,54 +49,76 @@ export default function CreateUserRestaurant() {
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Delete Account</h2>
+                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Create Restaurant</h2>
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Once your account is deleted, all of its resources and data will be permanently deleted. Before
-                    deleting your account, please download any data or information that you wish to retain.
+                    Click the "Create Restaurant" button and fill in the form with your restaurant's information. This includes details
+                    such as your restaurant's name, location, cuisine type, and operating hours. Your restaurant can then be managed through
+                    this account. Thank you for joining our community!
                 </p>
             </header>
 
-            <DangerButton onClick={confirmUserDeletion}>Delete Account</DangerButton>
+            <PrimaryButton onClick={showRestaurantModal}>Create Restaurant</PrimaryButton>
 
-            <Modal show={confirmingUserDeletion} onClose={closeModal}>
-                <form onSubmit={deleteUser} className="p-6">
+            <Modal show={showingRestaurantModal} onClose={closeModal}>
+                <form onSubmit={registerRestaurant} className="p-6">
                     <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        Are you sure you want to delete your account?
+                        Register Your Restaurant
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        Once your account is deleted, all of its resources and data will be permanently deleted. Please
-                        enter your password to confirm you would like to permanently delete your account.
+                        Please fill in the details below to register your restaurant on our platform.
                     </p>
 
                     <div className="mt-6">
-                        <InputLabel htmlFor="password" value="Password" className="sr-only" />
-
+                        <InputLabel htmlFor="restaurantName" value="Restaurant Name" className="sr-only" />
                         <TextInput
-                            id="password"
-                            type="password"
-                            name="password"
-                            ref={passwordInput}
-                            value={data.password}
-                            onChange={(e) => setData('password', e.target.value)}
+                            id="restaurantName"
+                            type="text"
+                            name="restaurantName"
+                            value={data.restaurantName}
+                            onChange={(e) => setData('restaurantName', e.target.value)}
                             className="mt-1 block w-3/4"
                             isFocused
-                            placeholder="Password"
+                            placeholder="Restaurant Name"
                         />
+                        <InputError message={errors.restaurantName} className="mt-2" />
 
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputLabel htmlFor="location" value="Location" className="sr-only" />
+                        <TextInput
+                            id="location"
+                            type="text"
+                            name="location"
+                            value={data.location}
+                            onChange={(e) => setData('location', e.target.value)}
+                            className="mt-1 block w-3/4"
+                            placeholder="Location"
+                        />
+                        <InputError message={errors.location} className="mt-2" />
+
+                        <InputLabel htmlFor="cuisine" value="Cuisine" className="sr-only" />
+                        <TextInput
+                            id="cuisine"
+                            type="text"
+                            name="cuisine"
+                            value={data.cuisine}
+                            onChange={(e) => setData('cuisine', e.target.value)}
+                            className="mt-1 block w-3/4"
+                            placeholder="Type of Cuisine"
+                        />
+                        <InputError message={errors.cuisine} className="mt-2" />
                     </div>
 
                     <div className="mt-6 flex justify-end">
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
-                        <DangerButton className="ms-3" disabled={processing}>
-                            Delete Account
-                        </DangerButton>
+                        <PrimaryButton className="ms-3" disabled={processing}>
+                            Register Restaurant
+                        </PrimaryButton>
                     </div>
                 </form>
             </Modal>
+
         </section>
     );
 }

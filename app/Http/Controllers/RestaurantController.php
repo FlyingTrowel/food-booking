@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Restaurant;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class RestaurantController extends Controller
 {
@@ -12,15 +15,33 @@ class RestaurantController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Dashboard');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+
+        // Validate incoming request data
+        $validatedData = $request->validate([
+            'restaurantName' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'cuisine' => 'required|string|max:255',
+        ]);
+
+        $restaurant = Restaurant::create([
+            'user_id' => Auth::user()->id,
+            'name' => $validatedData['restaurantName'],
+            'location' => $validatedData['location'],
+            'cuisine' => $validatedData['cuisine'],
+            // Add more fields as needed
+        ]);
+
+        // Redirect to /restaurant with success message
+        return back();
+
     }
 
     /**
@@ -28,7 +49,7 @@ class RestaurantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

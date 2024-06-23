@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RestaurantController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,5 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::post('/restaurant', [RestaurantController::class, 'create'])->name('restaurant.create')->middleware(['auth', 'verified']);
+Route::get('restaurant', [RestaurantController::class, 'index'])->name('restaurant.index')->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

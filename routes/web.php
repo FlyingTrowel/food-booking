@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\MenuController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +31,13 @@ Route::get('/restaurant', [RestaurantController::class, 'index'])->name('restaur
 Route::get('/restaurant/{id}/edit', [RestaurantController::class, 'edit'])->name('restaurant.edit')->middleware(['auth', 'verified']);
 Route::post('/restaurant/{id}/edit', [RestaurantController::class, 'update'])->name('restaurant.update')->middleware(['auth', 'verified']);
 Route::delete('/restaurant/{id}/delete', [RestaurantController::class, 'destroy'])->name('restaurant.destroy')->middleware(['auth', 'verified']);
+
+Route::get('/restaurant/{id}/menu', [MenuController::class, 'index'])->name('menu.index')->middleware(['auth', 'verified']);
+Route::get('/restaurant/{id}/createMenu', [MenuController::class, 'create'])->name('menu.create')->middleware(['auth', 'verified']);
+Route::post('/restaurant/{id}/storeMenu', [MenuController::class, 'store'])->name('menu.store')->middleware(['auth', 'verified']);
+Route::get('/menu/{id}/edit', [MenuController::class, 'edit'])->name('menu.edit')->middleware(['auth', 'verified']);
+Route::post('/menu/{id}/update', [MenuController::class, 'update'])->name('menu.update')->middleware(['auth', 'verified']);
+Route::delete('/menu/{id}/delete', [MenuController::class, 'destroy'])->name('menu.destroy')->middleware(['auth', 'verified']);
 
 
 require __DIR__.'/auth.php';

@@ -13,7 +13,7 @@ function MenuItemCard({ menuItem }) {
             </div>
             <div className="px-4 pb-2 flex items-center justify-between">
                 <span className="text-gray-900 dark:text-gray-200 font-bold">RM{menuItem.price}</span>
-                <Link href={/**route('cart.add', menuItem.id)*/ '/'} className="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+                <Link href={route('cart.add', menuItem.id)} className="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
                     Add to Cart
                 </Link>
             </div>

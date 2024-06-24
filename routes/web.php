@@ -39,6 +39,10 @@ Route::post('/menu/{id}/update', [MenuController::class, 'update'])->name('menu.
 Route::delete('/menu/{id}/delete', [MenuController::class, 'destroy'])->name('menu.destroy')->middleware(['auth', 'verified']);
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index')->middleware(['auth', 'verified']);
+Route::get('/cart/{id}', [CartController::class, 'add'])->name('cart.add')->middleware(['auth', 'verified']);
+Route::patch('/cart/{id}/{value}', [CartController::class, 'edit'])->name('cart.edit')->middleware(['auth', 'verified']);
+Route::delete('/cart/{id}/delete', [CartController::class, 'destroy'])->name('cart.destroy')->middleware(['auth', 'verified']);
+
 
 Route::get('/buy/{id}', [RestaurantController::class, 'restaurantPage'])->name('restaurant')->middleware(['auth', 'verified']);
 

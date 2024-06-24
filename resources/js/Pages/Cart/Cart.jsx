@@ -28,6 +28,7 @@ export default function Cart({ auth, id, carts }) {
     const [selected, setSelected] = useState([]);
     const [total, setTotal] = useState(0.0);
 
+
     const handleCheckbox = (e) => {
         const value = e.target.value;
         if (e.target.checked) {
@@ -37,9 +38,11 @@ export default function Cart({ auth, id, carts }) {
         }
 
     };
-    const handleCheckout = (e) => {
+    const handleCheckout = (e, cartId) => {
         e.preventDefault();
-        console.log(selected); // access the selected values from the state
+        console.log(cartId);
+
+        router.get(route('order.store', cartId));
 
     };
 
@@ -94,23 +97,15 @@ export default function Cart({ auth, id, carts }) {
                                                 className="text-red-500 hover:text-red-700 font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                             Remove
                                         </button>
+
+                                        <button type="button" onClick={(e) => handleCheckout(e, cart.id)}
+                                                className="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+                                            Checkout
+                                        </button>
                                     </li>
                                 ))}
                             </ul>
                         )}
-                    </div>
-
-                    <div className="ml-4">
-                        <h3 className="text-gray-900 dark:text-gray-200 font-bold">RM</h3>
-                    </div>
-
-                    {/* Checkout Button */}
-                    <div className="flex justify-start mb-4">
-
-                        <button type="button" onClick={handleCheckout}
-                                className="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
-                            Checkout
-                        </button>
                     </div>
                 </div>
 

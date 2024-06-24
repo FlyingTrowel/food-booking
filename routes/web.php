@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,6 +46,11 @@ Route::delete('/cart/{id}/delete', [CartController::class, 'destroy'])->name('ca
 
 
 Route::get('/buy/{id}', [RestaurantController::class, 'restaurantPage'])->name('restaurant')->middleware(['auth', 'verified']);
+
+Route::get('/order/{id}', [OrderController::class, 'store'])->name('order.store')->middleware(['auth', 'verified']);
+Route::get('/order', [OrderController::class, 'index'])->name('order.index')->middleware(['auth', 'verified']);
+
+
 
 
 

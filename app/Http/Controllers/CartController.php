@@ -23,6 +23,7 @@ class CartController extends Controller
         $carts = DB::table('carts')
             ->join('menus', 'carts.menu_id', '=', 'menus.id')
             ->select('menus.*', 'carts.*')
+            ->where('carts.user_id', Auth::id())
             ->get();
 
         //dd($carts);

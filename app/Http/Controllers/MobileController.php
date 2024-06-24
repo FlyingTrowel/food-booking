@@ -170,5 +170,19 @@ class MobileController extends Controller
         ], 200);
     }
 
+    public function hasRestaurant($id)
+    {
+        $exists = Restaurant::where('user_id', $id)->exists();
+
+        // Alternative using count
+        // $count = Restaurant::where('user_id', $id)->count();
+        // $exists = $count > 0;
+        //dd($exists);
+
+        return response()->json([
+            'hasRestaurant' => $exists,
+        ]);
+    }
+
 
 }

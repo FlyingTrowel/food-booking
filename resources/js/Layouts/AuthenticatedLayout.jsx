@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
@@ -7,6 +7,20 @@ import { Link } from '@inertiajs/react';
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const [hasRestaurant, setHasRestaurant] = useState(false); // Initialize state
+    //console.log(user.id);
+
+    useEffect(() => {
+        // Fetch user's restaurant existence on component mount
+        const fetchHasRestaurant = async () => {
+            const response = await fetch(route('has-restaurant', user.id)); // Replace with your API endpoint
+            const data = await response.json();
+            console.log(data)
+            setHasRestaurant(data.hasRestaurant); // Update state based on response
+        };
+
+        fetchHasRestaurant();
+    }, [user.id]); // Re-run effect on user ID change
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -17,7 +31,9 @@ export default function Authenticated({ user, header, children }) {
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
                                     <ApplicationLogo
-                                        className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"/>
+                                        className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
+                                        reduction={0.2}
+                                    />
                                 </Link>
                             </div>
 
@@ -28,9 +44,9 @@ export default function Authenticated({ user, header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('restaurant.index')} active={route().current('restaurant.index')}>
-                                    Restaurant
-                                </NavLink>
+                            <NavLink href={route('restaurant.index')} active={route().current('restaurant.index')}>
+                                Restaurant
+                            </NavLink>
                             </div>
                         </div>
 

@@ -30,7 +30,7 @@ export default function RestaurantHome({ auth, status, restaurant }) {
                         <form onSubmit={handleSubmit}>
                             {/* Name Input */}
                             <div className="mb-4">
-                                <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Name</label>
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Name</label>
                                 <input type="text" id="name" name="name" value={data.name}
                                        onChange={e => setData('name', e.target.value)}
                                        className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-600" />
@@ -39,7 +39,7 @@ export default function RestaurantHome({ auth, status, restaurant }) {
 
                             {/* Location Input */}
                             <div className="mb-4">
-                                <label htmlFor="location" className="block text-gray-700 font-bold mb-2">Location</label>
+                                <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Location</label>
                                 <input type="text" id="location" name="location" value={data.location}
                                        onChange={e => setData('location', e.target.value)}
                                        className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-600" />
@@ -48,7 +48,7 @@ export default function RestaurantHome({ auth, status, restaurant }) {
 
                             {/* Cuisine Input */}
                             <div className="mb-4">
-                                <label htmlFor="cuisine" className="block text-gray-700 font-bold mb-2">Cuisine</label>
+                                <label htmlFor="cuisine" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Cuisine</label>
                                 <input type="text" id="cuisine" name="cuisine" value={data.cuisine}
                                        onChange={e => setData('cuisine', e.target.value)}
                                        className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-600" />

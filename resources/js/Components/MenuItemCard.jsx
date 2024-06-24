@@ -5,7 +5,11 @@ function MenuItemCard({ menuItem }) {
     return (
         <div className="rounded-lg shadow-sm bg-white dark:bg-gray-800">
             <Link href={'/' /**route('cart.add', menuItem.id)*/}>
-                <img src="{{ asset('placeholder.jpg') }}" alt={menuItem.name} className="w-full h-40 object-cover rounded-t-lg" />
+                <img src={menuItem.image ? `/storage/menus/${menuItem.image}` : `/menus/test.jpg`}
+                        alt="Restaurant Image"
+                        className="h-48 w-48 aspect-square rounded-lg sm:rounded-none mr-4 mx-auto object-contain"
+                />
+
             </Link>
             <div className="p-4">
                 <h5 className="text-gray-900 dark:text-gray-200 font-bold">{menuItem.name}</h5>

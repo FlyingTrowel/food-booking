@@ -11,13 +11,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect('/login');
 });
+
 
 Route::get('/dashboard', [RestaurantController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -60,6 +56,8 @@ Route::get('/mobile/carts/add/{menu_id}/{user_id}', [MobileController::class, 'a
 Route::get('/mobile/carts/{id}', [MobileController::class, 'carts']);
 Route::get('/mobile/carts/checkout/{id}', [MobileController::class, 'checkout']);
 Route::get('/mobile/orders/{id}', [MobileController::class, 'orders']);
+
+route::get('/api/{id}/has-restaurant', [MobileController::class, 'hasRestaurant'])->name('has-restaurant');
 
 
 

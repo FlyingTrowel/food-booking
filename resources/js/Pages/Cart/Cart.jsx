@@ -8,7 +8,7 @@ export default function Cart({ auth, id, carts }) {
         event.preventDefault();
         console.log(cartId)
 
-        router.patch(route('cart.edit', [cartId, 1]))
+        router.patch(route('cart.edit', [cartId, 1]), {}, {preserveScroll:true});
 
     };
 
@@ -16,7 +16,7 @@ export default function Cart({ auth, id, carts }) {
         // Implement logic to update cart item quantity using Inertia
         event.preventDefault();
 
-        router.patch(route('cart.edit', [cartId, -1]))
+        router.patch(route('cart.edit', [cartId, -1]), {}, {preserveScroll:true});
 
     };
 
@@ -57,56 +57,62 @@ export default function Cart({ auth, id, carts }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                         {carts.length === 0 ? (
-                            <p>Your cart is empty.</p>
+                            <p className="text-center text-gray-500 dark:text-gray-300">Your cart is empty.</p>
                         ) : (
                             <ul className="list-disc space-y-4">
                                 {carts.map((cart) => (
-                                    <li key={cart.id} className="flex items-center justify-between">
+                                    <li key={cart.id}
+                                        className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 py-4">
                                         <div className="flex items-center">
-                                            <input type="checkbox" value={cart.id} onChange={handleCheckbox}
-                                                   className="mr-4"/>
-                                            <img src="{{ asset('placeholder.jpg') }}" alt={cart.name}
-                                                 className="w-16 h-16 rounded-lg object-cover"/>
-                                            <div className="ml-4">
-                                                <h3 className="text-gray-900 dark:text-gray-200 font-bold">{cart.name}</h3>
-                                                <p className="text-gray-700 dark:text-gray-400">{cart.description}</p>
+                                            <div className="flex flex-col">
+                                                <img
+                                                    src={cart.image ? `/storage/menus/${cart.image}` : `/menus/test.jpg`}
+                                                    alt="Restaurant Image"
+                                                    className="h-48 w-48 aspect-square rounded-lg sm:rounded-none mr-4 mx-auto object-contain"
+                                                />
+                                                <div className="space-y-1">
+                                                    <h3 className="text-gray-900 dark:text-gray-200 font-bold">{cart.name}</h3>
+                                                    <p className="text-gray-700 dark:text-gray-400">{cart.description}</p>
+                                                </div>
                                             </div>
-                                            <div className="ml-4">
-                                                <h3 className="text-gray-900 dark:text-gray-200 font-bold">{`RM${cart.price}`}</h3>
-                                            </div>
+                                            <div
+                                                className="text-gray-900 dark:text-gray-200 font-bold">RM{cart.price}</div>
                                         </div>
                                         <div className="flex items-center">
-                                            <button
-                                                className="mr-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                onClick={(e) => handleQuantityDown(e, cart.id)}
-                                            >
-                                                -
+                                            <div className="flex space-x-2">
+                                                <button
+                                                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                    onClick={(e) => handleQuantityDown(e, cart.id)}
+                                                >
+                                                    -
+                                                </button>
+                                                <input
+                                                    type="text"
+                                                    className="w-10 text-center border border-gray-300 rounded-lg px-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                    value={cart.quantity}
+                                                />
+                                                <button
+                                                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                                    onClick={(e) => handleQuantityUp(e, cart.id)}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                            <button type="button" onClick={() => handleRemoveItem(cart.id)}
+                                                    className="ml-4 text-red-500 hover:text-red-700 font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                Remove
                                             </button>
-                                            <input type="text"
-                                                   className="w-10 text-center border border-gray-300 rounded-lg px-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                   value={cart.quantity}/>
-                                            <button
-                                                className="ml-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                                onClick={(e) => handleQuantityUp(e, cart.id)}
-                                            >
-                                                +
+                                            <button type="button" onClick={(e) => handleCheckout(e, cart.id)}
+                                                    className="ml-4 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+                                                Checkout
                                             </button>
                                         </div>
-
-                                        <button type="button" onClick={() => handleRemoveItem(cart.id)}
-                                                className="text-red-500 hover:text-red-700 font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                            Remove
-                                        </button>
-
-                                        <button type="button" onClick={(e) => handleCheckout(e, cart.id)}
-                                                className="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
-                                            Checkout
-                                        </button>
                                     </li>
                                 ))}
                             </ul>
                         )}
                     </div>
+
                 </div>
 
 

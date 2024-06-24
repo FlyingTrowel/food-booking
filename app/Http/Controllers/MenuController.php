@@ -40,22 +40,33 @@ class MenuController extends Controller
     public function store(Request $request, $id)
     {
         //dd($request);
-
-        $validated = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required',
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation rules
         ]);
 
-        //dd($validated['name']);
+        // Handle image upload
+        $imageName = null;
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $request->image->storeAs('public/menus', $imageName); // Store in public/menus
+        }
+
+        //dd($imageName);
+
         $menu = Menu::create([
             'restaurant_id' => $id,
-            'name' => $validated['name'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
+            'name' => $validatedData['name'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'image' => $imageName, // Store filename
         ]);
 
         return redirect(route('menu.index', $id));
+
+
 
     }
 

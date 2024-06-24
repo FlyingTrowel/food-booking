@@ -11,9 +11,10 @@ function CustomerRestaurant({ auth, restaurant, menus }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                    <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                        Restaurant banner
+                    <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg flex items-center">
+                        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">{restaurant.name}</h2>  {/* Added restaurant name */}
                     </div>
+
 
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                         <div className="grid grid-cols-4 gap-4"> {/* Use Tailwind CSS grid for layout */}

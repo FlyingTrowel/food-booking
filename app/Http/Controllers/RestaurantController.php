@@ -19,11 +19,19 @@ class RestaurantController extends Controller
     public function index()
     {
         $restaurants = Restaurant::where('user_id', Auth::id())->get();
+        $exists = Restaurant::where('user_id', Auth::id())->exists();
 
-        return Inertia::render('Restaurant/RestaurantHome', [
-            'restaurants' => $restaurants,
-            'status' => session('status'),
-        ]);
+        if ($exists){
+            return Inertia::render('Restaurant/RestaurantHome', [
+                'restaurants' => $restaurants,
+                'status' => session('status'),
+            ]);
+        }else{
+            // Use a flash message instead of a popup for better UX
+            session()->flash('restaurant_required', 'You need to create a restaurant in your profile section to view your restaurants.');
+            return redirect(route('dashboard'));
+        }
+
     }
 
     /**
@@ -33,11 +41,27 @@ class RestaurantController extends Controller
     {
         $restaurants = Restaurant::all();
 
-        return Inertia::render('Dashboard',[
+        $menusWithImage = [];
+        foreach ($restaurants as $restaurant) {
+            // Find the first menu with an image for the current restaurant
+            $menuWithImage = Menu::where('restaurant_id', $restaurant->id)
+                ->whereNotNull('image') // Check for non-null image column
+                ->first();
+
+            if ($menuWithImage) {
+                $menusWithImage[$restaurant->id] = $menuWithImage;
+            }
+        }
+
+        return Inertia::render('Dashboard', [
             'status' => session('status'),
             'restaurants' => $restaurants,
+            'flash' => session()->get('flash'),
+            'menusWithImage' => $menusWithImage,
         ]);
     }
+
+
 
     /**
      * display customer facing restaurant with menu.

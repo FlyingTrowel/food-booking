@@ -6,12 +6,26 @@ export default function CreateMenu({ auth, errors, id }) {
         name: '',
         description: '',
         price: '',
+        image: null, // Add state for image
     });
+
+    const handleImageChange = (event) => {
+        form.setData('image', event.target.files[0]);
+    };
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        form.post(route('menu.store', id)); // Assuming route for creating menus
+        // Include image in form data using FormData
+        const formData = new FormData();
+        formData.append('name', form.data.name);
+        formData.append('description', form.data.description);
+        formData.append('price', form.data.price);
+        formData.append('image', form.data.image);
+        form.post(route('menu.store', id));
     };
+
 
     return (
         <AuthenticatedLayout
@@ -25,7 +39,8 @@ export default function CreateMenu({ auth, errors, id }) {
                     <div className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                <label htmlFor="name"
+                                       className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                     Name
                                 </label>
                                 <input
@@ -40,7 +55,8 @@ export default function CreateMenu({ auth, errors, id }) {
                             </div>
 
                             <div className="mb-4">
-                                <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                <label htmlFor="description"
+                                       className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                     Description
                                 </label>
                                 <textarea
@@ -50,11 +66,13 @@ export default function CreateMenu({ auth, errors, id }) {
                                     value={form.data.description}
                                     onChange={(event) => form.setData('description', event.target.value)}
                                 />
-                                {errors.description && <div className="text-red-500 text-xs italic">{errors.errors.description}</div>}
+                                {errors.description &&
+                                    <div className="text-red-500 text-xs italic">{errors.errors.description}</div>}
                             </div>
 
                             <div className="mb-4">
-                                <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                <label htmlFor="price"
+                                       className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                                     Price
                                 </label>
                                 <input
@@ -66,10 +84,27 @@ export default function CreateMenu({ auth, errors, id }) {
                                     value={form.data.price}
                                     onChange={(event) => form.setData('price', event.target.value)}
                                 />
-                                {errors.price && <div className="text-red-500 text-xs italic">{errors.errors.price}</div>}
+                                {errors.price &&
+                                    <div className="text-red-500 text-xs italic">{errors.errors.price}</div>}
                             </div>
 
-                            <button type="submit" className="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+                            <div className="mb-4">
+                                <label htmlFor="image"
+                                       className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                                    Image
+                                </label>
+                                <input
+                                    type="file"
+                                    id="image"
+                                    name="image"
+                                    className="block w-full mt-1 border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700 dark:text-gray-200"
+                                    onChange={handleImageChange}
+                                />
+                            </div>
+
+
+                            <button type="submit"
+                                    className="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
                                 Create Menu Item
                             </button>
                         </form>

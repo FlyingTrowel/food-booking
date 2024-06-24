@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\CartController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,9 +17,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [RestaurantController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,6 +37,11 @@ Route::post('/restaurant/{id}/storeMenu', [MenuController::class, 'store'])->nam
 Route::get('/menu/{id}/edit', [MenuController::class, 'edit'])->name('menu.edit')->middleware(['auth', 'verified']);
 Route::post('/menu/{id}/update', [MenuController::class, 'update'])->name('menu.update')->middleware(['auth', 'verified']);
 Route::delete('/menu/{id}/delete', [MenuController::class, 'destroy'])->name('menu.destroy')->middleware(['auth', 'verified']);
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index')->middleware(['auth', 'verified']);
+
+Route::get('/buy/{id}', [RestaurantController::class, 'restaurantPage'])->name('restaurant')->middleware(['auth', 'verified']);
+
 
 
 require __DIR__.'/auth.php';

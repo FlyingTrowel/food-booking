@@ -27,6 +27,34 @@ class RestaurantController extends Controller
     }
 
     /**
+     * Display the customer facing dashboard.
+     */
+    public function dashboard()
+    {
+        $restaurants = Restaurant::all();
+
+        return Inertia::render('Dashboard',[
+            'status' => session('status'),
+            'restaurants' => $restaurants,
+        ]);
+    }
+
+    /**
+     * display customer facing restaurant with menu.
+     */
+    public function restaurantPage($id)
+    {
+        $restaurant = Restaurant::find($id);
+        $menus = Menu::where('restaurant_id', $id)->get();
+
+        return Inertia::render('Restaurant/CustomerRestaurant', [
+            'status' => session('status'),
+            'restaurant' => $restaurant,
+            'menus' => $menus,
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)

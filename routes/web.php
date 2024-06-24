@@ -5,6 +5,7 @@ use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\MobileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,6 +50,24 @@ Route::get('/buy/{id}', [RestaurantController::class, 'restaurantPage'])->name('
 
 Route::get('/order/{id}', [OrderController::class, 'store'])->name('order.store')->middleware(['auth', 'verified']);
 Route::get('/order', [OrderController::class, 'index'])->name('order.index')->middleware(['auth', 'verified']);
+
+
+Route::post('/mobile/register', [MobileController::class, 'register']);
+Route::post('/mobile/login', [MobileController::class, 'login']);
+Route::get('/mobile/restaurants', [MobileController::class, 'restaurants']);
+Route::get('/mobile/{id}/menus', [MobileController::class, 'menus']);
+Route::get('/mobile/carts/add/{menu_id}/{user_id}', [MobileController::class, 'addCart']);
+Route::get('/mobile/carts/{id}', [MobileController::class, 'carts']);
+Route::get('/mobile/carts/checkout/{id}', [MobileController::class, 'checkout']);
+Route::get('/mobile/orders/{id}', [MobileController::class, 'orders']);
+
+
+
+
+
+Route::get('/mobile', function () {
+    return 'Hello World';
+});
 
 
 

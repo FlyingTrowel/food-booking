@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Support\Collection;
+
 
 class RestaurantController extends Controller
 {
@@ -15,7 +18,12 @@ class RestaurantController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Dashboard');
+        $restaurants = Restaurant::where('user_id', Auth::id())->get();
+
+        return Inertia::render('Restaurant/RestaurantHome', [
+            'restaurants' => $restaurants,
+            'status' => session('status'),
+        ]);
     }
 
     /**
@@ -63,24 +71,64 @@ class RestaurantController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Restaurant $restaurant)
+    public function edit(Restaurant $restaurant, $id)
     {
-        //
+        //dd($id);
+
+        $restaurant = Restaurant::where('id', $id)->get();
+
+        //dd($restaurant);
+
+        return Inertia::render('Restaurant/RestaurantEdit', [
+            'restaurant' => $restaurant,
+            'status' => session('status'),
+        ]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Restaurant $restaurant)
+    public function update(Request $request, Restaurant $restaurant, $id)
     {
-        //
+        //dd($id);
+
+        $validated = $request->validate([
+            'name' => 'required',
+            'location' => 'required',
+            'cuisine' => 'required',
+        ]);
+
+        $restaurant = Restaurant::find($id);
+
+        //dd($validated['name']);
+
+        $restaurant->name = $validated['name'];
+        $restaurant->location = $validated['location'];
+        $restaurant->cuisine = $validated['cuisine'];
+
+        $restaurant->save();
+
+        return redirect(route('restaurant.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Restaurant $restaurant)
+    public function destroy(Restaurant $restaurant, $id)
     {
-        //
+        //dd("delete");
+
+        $deleteMenus = Menu::where('restaurant_id', $id)->delete();
+        //$menus = Re
+
+        //dd($restaurant);
+
+        $restaurant = Restaurant::find($id);
+
+        $restaurant->delete();
+
+
+
     }
 }
